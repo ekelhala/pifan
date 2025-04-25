@@ -1,11 +1,11 @@
 import time
-from gpiozero import PWMOutputDevice
+from gpiozero import GPIODevice
 
 PWM_PIN = "GPIO12"
 TEMP_SENSOR_PATH = "/sys/class/thermal/thermal_zone0/temp"
 UPDATE_INTERVAL = 5
 
-fan = PWMOutputDevice(PWM_PIN)
+fan = GPIODevice(PWM_PIN)
 
 def get_cpu_temp():
     """
@@ -17,10 +17,11 @@ def get_cpu_temp():
 
 def run():
     # just a demo, start from 0, increment and decrement
-    value = 0.8
+    value = True
     while True:
         print(f"current temp:", get_cpu_temp())
         fan.value = value
+        value = not value
         time.sleep(UPDATE_INTERVAL)
 
 if __name__=="__main__":
