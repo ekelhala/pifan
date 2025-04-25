@@ -17,15 +17,10 @@ def get_cpu_temp():
 
 def run():
     # just a demo, start from 0, increment and decrement
-    value = 0
-    step = 0.1
+    value = 0.8
     while True:
         print(f"current temp:", get_cpu_temp())
         fan.value = value
-        if value >= 1.0:
-            value -= step
-        else:
-            value += step
         time.sleep(UPDATE_INTERVAL)
 
 if __name__=="__main__":
