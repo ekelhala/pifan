@@ -24,6 +24,7 @@ def run():
             fan.on()
         else:
             fan.off()
+        value = not value
         time.sleep(UPDATE_INTERVAL)
 
 if __name__=="__main__":
