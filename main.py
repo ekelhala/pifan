@@ -24,8 +24,10 @@ def calculate_speed(cpu_temp: float) -> float:
     """
     Calculates the speed for the fan, given the current CPU temperature
     """
-    if cpu_temp < OPTIONS["temp_low"]:
+    if cpu_temp <= OPTIONS["temp_low"]:
         return 0.0
+    elif cpu_temp >= OPTIONS["temp_high"]:
+        return 1.0
     else:
         # return a value between 0.3 and 1.0 based on linear interpolation
         return 0.3 + (cpu_temp - OPTIONS["temp_low"]) * (1.0 - 0.3) / (OPTIONS["temp_high"] - OPTIONS["temp_low"])
