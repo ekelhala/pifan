@@ -2,6 +2,7 @@ import time
 from gpiozero import PWMOutputDevice
 
 from pifan.fan_control.max_speed_controller import MaxSpeedController
+from pifan.config import config_loader
 
 TEMP_SENSOR_PATH = "/sys/class/thermal/thermal_zone0/temp"
 
@@ -23,15 +24,18 @@ def get_temp() -> float:
     return int(temp_str) / 1000
 
 def run():
-    
-    controller = MaxSpeedController()
+    config = config_loader.load_config("./default.toml")
+    controller = MaxSpeedController({
+                                    "temp_high": config["fan"]["temp_high"],
+                                    "temp_low": config["fan"]["temp_low"]
+                                    })
     while True:
         temp = get_temp()
         value = controller.get_speed(temp)
         print(f"current temp:", temp)
         print(f"current speed {value}")
         fan.value = value
-        time.sleep(OPTIONS["update_interval"])
+        time.sleep(config["daemon"]["update_interval"])
 
 if __name__=="__main__":
     try:

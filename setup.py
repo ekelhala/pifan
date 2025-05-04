@@ -12,7 +12,7 @@ setup(
     },
     include_package_data=True,
     data_files=[
-        ("/etc/pifan", ["./default.conf"]),
+        ("/etc/pifan", ["./default.toml"]),
         ("/etc/systemd/system", ["./pifand.service"])
     ],
     author="Emil Kelhälä",

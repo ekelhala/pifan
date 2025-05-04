@@ -5,6 +5,17 @@ class BaseController():
     """
 
     def __init__(self, options: dict):
+        """
+        Create a new fan controller with the given options.
+        The options-dictionary MUST contain the following contents:
+        
+        ```
+        {
+           "temp_high": float,
+           "temp_low": float
+        }
+        ```
+        """
         self.options = options
 
     def get_speed(self, system_temperature: float) -> float:
