@@ -4,7 +4,7 @@ After=multi-user.target
 
 [Service]
 Type=simple
-ExecStart=pifand
+ExecStart=pifan-daemon
 Restart=on-failure
 User=root
 
