@@ -3,6 +3,9 @@ from gpiozero import PWMOutputDevice
 
 from pifan.fan_control.max_speed_controller import MaxSpeedController
 from pifan.fan_control.linear_interpolator_controller import LinearInterpolatorController
+from fan_control.get_controller import get_controller
+from fan_control.base_controller import ControllerOptions
+
 from pifan.config import config_loader
 
 TEMP_SENSOR_PATH = "/sys/class/thermal/thermal_zone0/temp"
@@ -24,17 +27,8 @@ def get_temp() -> float:
 
 def run():
     config = config_loader.load_config()
-    match config["fan"]["controller"]:
-        case "linear_interpolator":
-            controller = LinearInterpolatorController({
-                                    "temp_high": config["fan"]["temp_high"],
-                                    "temp_low": config["fan"]["temp_low"]
-                                    })
-        case _:
-            controller = MaxSpeedController({
-                                            "temp_high": config["fan"]["temp_high"],
-                                            "temp_low": config["fan"]["temp_low"]
-                                            })
+    controller_options = ControllerOptions(config["fan"]["temp_high"], config["fan"]["temp_low"])
+    controller = get_controller(config["fan"]["controller"], controller_options)
     fan = PWMOutputDevice(config["fan"]["gpio_pin"])
     while True:
         try:

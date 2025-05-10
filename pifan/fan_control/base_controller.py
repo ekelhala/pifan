@@ -1,20 +1,21 @@
 
+class ControllerOptions:
+    """
+    Represents the controller configuration
+    """
+
+    def __init__(self, temp_high: float, temp_low: float):
+        self.temp_low = temp_low
+        self.temp_high = temp_high
+
 class BaseController():
     """
     Base class for fan controllers
     """
 
-    def __init__(self, options: dict):
+    def __init__(self, options: ControllerOptions):
         """
         Create a new fan controller with the given options.
-        The options-dictionary MUST contain the following contents:
-        
-        ```
-        {
-           "temp_high": float,
-           "temp_low": float
-        }
-        ```
         """
         self.options = options
 
