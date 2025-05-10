@@ -1,4 +1,5 @@
 import time
+import signal
 from gpiozero import PWMOutputDevice
 
 from pifan.fan_control.get_controller import get_controller
@@ -23,20 +24,24 @@ class Daemon:
             temp_str = sensor.read()
         return int(temp_str) / 1000
 
+    def _exit(self):
+        self._log_message("stopping daemon...")
+        self.fan.value = 0.0
+
     def run(self):
         config = config_loader.load_config()
         controller_options = ControllerOptions(config["fan"]["temp_high"], config["fan"]["temp_low"])
         controller = get_controller(config["fan"]["controller"], controller_options)
-        fan = PWMOutputDevice(pin=config["fan"]["gpio_pin"], 
+        self.fan = PWMOutputDevice(pin=config["fan"]["gpio_pin"], 
                             frequency=config["fan"]["frequency"])
+        signal.signal(signal.SIGTERM, self._exit)
         self._log_message("fan daemon started")
         while True:
             try:
                 temp = self.get_temp()
                 self.fan_speed = round(controller.get_speed(temp), 2)
-                fan.value = self.fan_speed
+                self.fan.value = self.fan_speed
                 time.sleep(config["daemon"]["update_interval"])
-            except Exception:
-                self._log_message("stopping daemon...")
-                fan.value = 0.0
+            except KeyboardInterrupt:
+                self._exit()
                 break

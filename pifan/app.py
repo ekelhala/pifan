@@ -1,3 +1,5 @@
+import sys
+
 from pifan.socket_server import SocketServer
 from pifan.daemon import Daemon
 
@@ -8,3 +10,4 @@ def start():
     daemon.run()
     # if we get here, it means that daemon has stopped
     server.stop()
+    sys.exit(0)
