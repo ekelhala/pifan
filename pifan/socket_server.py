@@ -5,10 +5,13 @@ Useful for querying information and making configuration changes on the fly.
 import os
 import socket
 import threading
+import json
+
+from pifan.daemon import Daemon
 
 class SocketServer:
 
-    def __init__(self, daemon, socket_path: str = "/run/pifan.sock"):
+    def __init__(self, daemon: Daemon, socket_path: str = "/tmp/pifan.sock"):
         self.socket_path = socket_path
         self.daemon = daemon
 
@@ -22,7 +25,18 @@ class SocketServer:
         while True:
             connection, _ = self.server.accept()
             with connection:
-                connection.close()
+                try:
+                    data = connection.recv(1024).decode()
+                    request = json.loads(data)
+                    if request["command"] == "get_speed":
+                        response = {"status": "ok","speed": self.daemon.value}
+                    else: response = {"status": "error", "message": "unknown command"}
+                    connection.sendall(json.dumps(response).encode("utf-8"))
+                except json.JSONDecodeError:
+                    self._log_message("error decoding client message")
+                    connection.sendall(json.dumps({"status":"error", "message": "JSON decode error"}).encode("utf-8"))                    
+                except Exception:
+                    connection.sendall(json.dumps({"status":"error", "message": "unknown error"}).encode("utf-8"))
 
     def start(self):
         """

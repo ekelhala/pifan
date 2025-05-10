@@ -10,6 +10,7 @@ class Daemon:
 
     def __init__(self):
         self.temp_sensor_path = "/sys/class/thermal/thermal_zone0/temp"
+        self.fan_speed = 0.0
 
     def _log_message(self, message: str):
         print(f"[daemon] {message}")
@@ -32,8 +33,8 @@ class Daemon:
         while True:
             try:
                 temp = self.get_temp()
-                value = controller.get_speed(temp)
-                fan.value = value
+                self.fan_speed = round(controller.get_speed(temp), 1)
+                fan.value = self.fan_speed
                 time.sleep(config["daemon"]["update_interval"])
             except KeyboardInterrupt:
                 self._log_message("stopping daemon...")
