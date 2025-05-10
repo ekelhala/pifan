@@ -33,10 +33,10 @@ class Daemon:
         while True:
             try:
                 temp = self.get_temp()
-                self.fan_speed = round(controller.get_speed(temp), 1)
+                self.fan_speed = round(controller.get_speed(temp), 2)
                 fan.value = self.fan_speed
                 time.sleep(config["daemon"]["update_interval"])
-            except KeyboardInterrupt:
+            except Exception:
                 self._log_message("stopping daemon...")
                 fan.value = 0.0
                 break

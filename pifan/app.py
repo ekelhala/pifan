@@ -6,3 +6,5 @@ def start():
     server = SocketServer(daemon)
     server.start()
     daemon.run()
+    # if we get here, it means that daemon has stopped
+    server.stop()

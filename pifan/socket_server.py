@@ -49,7 +49,7 @@ class SocketServer:
         self.server.listen(1)
         self.thread = threading.Thread(target=self._handle_connections, daemon=True)
         self.thread.start()
-        self._log_message(f"started, listening on socket {self.socket_path}")
+        self._log_message(f"server started, listening on socket {self.socket_path}")
 
     def stop(self):
         """
