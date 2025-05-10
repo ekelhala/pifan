@@ -6,8 +6,8 @@ After=multi-user.target
 Type=simple
 ExecStart=pifan-daemon
 Restart=on-failure
-User=pifan
+User=root
 Environment=PYTHONUNBUFFERED=1
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
