@@ -4,6 +4,7 @@
     temp_high = 75.0
     controller = "max_speed" # chooses the fan controller, currently "max_speed" or "linear_interpolator"
     gpio_pin = "GPIO12"
+    frequency = 100 # control pulse frequency in Hz
 
 [daemon]
     update_interval = 5 # amount of time in seconds to sleep between checking temperature

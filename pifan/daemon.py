@@ -20,7 +20,8 @@ def run():
     config = config_loader.load_config()
     controller_options = ControllerOptions(config["fan"]["temp_high"], config["fan"]["temp_low"])
     controller = get_controller(config["fan"]["controller"], controller_options)
-    fan = PWMOutputDevice(config["fan"]["gpio_pin"])
+    fan = PWMOutputDevice(pin=config["fan"]["gpio_pin"], 
+                          frequency=config["fan"]["frequency"])
     while True:
         try:
             temp = get_temp()
