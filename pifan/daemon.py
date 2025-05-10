@@ -25,6 +25,7 @@ class Daemon:
         return int(temp_str) / 1000
 
     def _handle_sigterm(self, _signum, _frame):
+        self._keep_running = False
         self._exit()
 
     def _exit(self):
@@ -38,8 +39,9 @@ class Daemon:
         self.fan = PWMOutputDevice(pin=config["fan"]["gpio_pin"], 
                             frequency=config["fan"]["frequency"])
         signal.signal(signal.SIGTERM, self._handle_sigterm)
+        self._keep_running = True
         self._log_message("fan daemon started")
-        while True:
+        while self._keep_running:
             try:
                 temp = self.get_temp()
                 self.fan_speed = round(controller.get_speed(temp), 2)
