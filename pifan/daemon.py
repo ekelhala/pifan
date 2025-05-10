@@ -2,6 +2,7 @@ import time
 from gpiozero import PWMOutputDevice
 
 from pifan.fan_control.max_speed_controller import MaxSpeedController
+from pifan.fan_control.linear_interpolator_controller import LinearInterpolatorController
 from pifan.config import config_loader
 
 TEMP_SENSOR_PATH = "/sys/class/thermal/thermal_zone0/temp"
@@ -13,8 +14,6 @@ OPTIONS = {
     "update_interval": 5
 }
 
-fan = PWMOutputDevice(OPTIONS["gpio_pin"])
-
 def get_temp() -> float:
     """
     Reads the temperature from the provided TEMP_SENSOR_PATH
@@ -25,10 +24,18 @@ def get_temp() -> float:
 
 def run():
     config = config_loader.load_config()
-    controller = MaxSpeedController({
+    match config["fan"]["controller"]:
+        case "linear_interpolator":
+            controller = LinearInterpolatorController({
                                     "temp_high": config["fan"]["temp_high"],
                                     "temp_low": config["fan"]["temp_low"]
                                     })
+        case _:
+            controller = MaxSpeedController({
+                                            "temp_high": config["fan"]["temp_high"],
+                                            "temp_low": config["fan"]["temp_low"]
+                                            })
+    fan = PWMOutputDevice(config["fan"]["gpio_pin"])
     while True:
         try:
             temp = get_temp()
