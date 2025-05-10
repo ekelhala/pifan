@@ -6,35 +6,36 @@ from pifan.fan_control.base_controller import ControllerOptions
 
 from pifan.config import config_loader
 
-TEMP_SENSOR_PATH = "/sys/class/thermal/thermal_zone0/temp"
+class Daemon:
 
-def get_temp() -> float:
-    """
-    Reads the temperature from the provided TEMP_SENSOR_PATH
-    """
-    with open(TEMP_SENSOR_PATH, "r") as sensor:
-        temp_str = sensor.read()
-    return int(temp_str) / 1000
+    def __init__(self):
+        self.temp_sensor_path = "/sys/class/thermal/thermal_zone0/temp"
 
-def run():
-    config = config_loader.load_config()
-    controller_options = ControllerOptions(config["fan"]["temp_high"], config["fan"]["temp_low"])
-    controller = get_controller(config["fan"]["controller"], controller_options)
-    fan = PWMOutputDevice(pin=config["fan"]["gpio_pin"], 
-                          frequency=config["fan"]["frequency"])
-    while True:
-        try:
-            temp = get_temp()
-            value = controller.get_speed(temp)
-            print(f"current temp:", temp)
-            print(f"current speed {value}")
-            fan.value = value
-            time.sleep(config["daemon"]["update_interval"])
-        except KeyboardInterrupt:
-            print("stopping pifan daemon...")
-            fan.value = 0.0
-            break
+    def _log_message(self, message: str):
+        print(f"[daemon] {message}")
 
+    def get_temp(self) -> float:
+        """
+        Reads the temperature from the provided TEMP_SENSOR_PATH
+        """
+        with open(self.temp_sensor_path, "r") as sensor:
+            temp_str = sensor.read()
+        return int(temp_str) / 1000
 
-if __name__=="__main__":
-    run()
+    def run(self):
+        config = config_loader.load_config()
+        controller_options = ControllerOptions(config["fan"]["temp_high"], config["fan"]["temp_low"])
+        controller = get_controller(config["fan"]["controller"], controller_options)
+        fan = PWMOutputDevice(pin=config["fan"]["gpio_pin"], 
+                            frequency=config["fan"]["frequency"])
+        self._log_message("fan daemon started")
+        while True:
+            try:
+                temp = self.get_temp()
+                value = controller.get_speed(temp)
+                fan.value = value
+                time.sleep(config["daemon"]["update_interval"])
+            except KeyboardInterrupt:
+                self._log_message("stopping daemon...")
+                fan.value = 0.0
+                break

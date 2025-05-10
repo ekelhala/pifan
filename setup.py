@@ -7,7 +7,7 @@ setup(
     install_requires=[],
     entry_points={
         "console_scripts": [
-            "pifan-daemon = pifan.daemon:run"
+            "pifan-daemon = pifan.app:start"
         ]
     },
     include_package_data=True,
