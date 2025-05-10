@@ -24,6 +24,9 @@ class Daemon:
             temp_str = sensor.read()
         return int(temp_str) / 1000
 
+    def _handle_sigterm(self, _signum, _frame):
+        self._exit()
+
     def _exit(self):
         self._log_message("stopping daemon...")
         self.fan.value = 0.0
@@ -34,7 +37,7 @@ class Daemon:
         controller = get_controller(config["fan"]["controller"], controller_options)
         self.fan = PWMOutputDevice(pin=config["fan"]["gpio_pin"], 
                             frequency=config["fan"]["frequency"])
-        signal.signal(signal.SIGTERM, self._exit)
+        signal.signal(signal.SIGTERM, self._handle_sigterm)
         self._log_message("fan daemon started")
         while True:
             try:
