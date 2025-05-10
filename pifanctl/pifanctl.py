@@ -32,7 +32,7 @@ def print_error(response):
 
 def main():
     parser = argparse.ArgumentParser("pifanctl")
-    parser.add_argument("command", "Command to send to pifan daemon")
+    parser.add_argument("command")
     args = parser.parse_args()
     if hasattr(args, "command"):
         if args.command in COMMANDS:
