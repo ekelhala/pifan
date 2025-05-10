@@ -14,16 +14,12 @@ class SocketServer:
     def __init__(self, daemon: Daemon, socket_path: str = "/tmp/pifan.sock"):
         self.socket_path = socket_path
         self.daemon = daemon
-        self.running = True
+        self.stop_event = threading.Event()
 
-    def _log_message(self, message):
-        print(f"[socket_server] {message}")
-
-    def _handle_connections(self):
         """
         Handle client connection on the socket
         """
-        while self.running:
+        while not self.stop_event.is_set():
             connection, _ = self.server.accept()
             with connection:
                 try:
@@ -38,6 +34,7 @@ class SocketServer:
                     connection.sendall(json.dumps({"status":"error", "message": "JSON decode error"}).encode("utf-8"))                    
                 except Exception:
                     connection.sendall(json.dumps({"status":"error", "message": "unknown error"}).encode("utf-8"))
+        connection.close()
 
     def start(self):
         """
@@ -57,6 +54,7 @@ class SocketServer:
         Stop socket server
         """
         if self.thread:
-            self.running = False
-            self.thread.join()
+            self.stop_event.set()
+            if os.path.exists(self.socket_path):
+                os.remove(self.socket_path)
             self._log_message("socket server exiting now")
