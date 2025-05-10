@@ -2,7 +2,7 @@
 [fan]
     temp_low = 45.0
     temp_high = 75.0
-    controller = "max_speed" # chooses the fan controller, currently "max_speed" or "linear_interpolator"
+    controller = "max_speed"
     gpio_pin = "GPIO12"
     frequency = 100 # control pulse frequency in Hz
 

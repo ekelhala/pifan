@@ -17,7 +17,7 @@ Currently the daemon can be installed by cloning the repository and using the pr
 
 ## Controllers
 
-`pifan` provides two controller profiles for your fan: `max_speed` and `linear_interpolator`. The controller you want to use can be selected by setting the value of `controller` under `[fan]` in the configuration file. Default controller is `max_speed`.
+`pifan` provides three controller profiles for your fan: `max_speed`, `linear_interpolator` and `silent`. The controller you want to use can be selected by setting the value of `controller` under `[fan]` in the configuration file. Default controller is `max_speed`.
 
 ### `max_speed` and `linear_interpolator`
 
