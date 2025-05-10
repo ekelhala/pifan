@@ -46,9 +46,9 @@ class SocketServer:
                         case "get_speed":
                             response = self._ok_response({"fan_speed": self.daemon.fan_speed})
                         case "get_status":
-                            response = self._ok_response({"status": self.daemon.get_status()})
+                            response = self._ok_response(self.daemon.get_status())
                         case "get_config":
-                            response = self._ok_response({"config": self.daemon.get_config()})
+                            response = self._ok_response(self.daemon.get_config())
                         case _:
                             response = self._error_response("unknown command")
 
