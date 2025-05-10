@@ -23,6 +23,27 @@ class Daemon:
         with open(self.temp_sensor_path, "r") as sensor:
             temp_str = sensor.read()
         return int(temp_str) / 1000
+    
+    def get_status(self) -> dict[str]:
+        """
+        Daemon status as dictionary
+        """
+        return {
+            "system_temperature": self.get_temp(),
+            "fan_speed": self.fan_speed
+        }
+    
+    def get_config(self) -> dict[str]:
+        """
+        Daemon configuration as dictionary
+        """
+        return {
+            "temp_high": self.config["fan"]["temp_high"],
+            "temp_low": self.config["fan"]["temp_low"],
+            "gpio_pin": self.config["fan"]["gpio_pin"],
+            "controller": self.config["fan"]["controller"],
+            "frequency": self.config["fan"]["frequency"]
+        }
 
     def _handle_sigterm(self, _signum, _frame):
         self._keep_running = False
@@ -33,11 +54,12 @@ class Daemon:
         self.fan.value = 0.0
 
     def run(self):
-        config = config_loader.load_config()
-        controller_options = ControllerOptions(config["fan"]["temp_high"], config["fan"]["temp_low"])
-        controller = get_controller(config["fan"]["controller"], controller_options)
-        self.fan = PWMOutputDevice(pin=config["fan"]["gpio_pin"], 
-                            frequency=config["fan"]["frequency"])
+        self.config = config_loader.load_config()
+        controller_options = ControllerOptions(self.config["fan"]["temp_high"],
+                                               self.config["fan"]["temp_low"])
+        controller = get_controller(self.config["fan"]["controller"], controller_options)
+        self.fan = PWMOutputDevice(pin=self.config["fan"]["gpio_pin"], 
+                                   frequency=self.config["fan"]["frequency"])
         signal.signal(signal.SIGTERM, self._handle_sigterm)
         self._keep_running = True
         self._log_message("fan daemon started")
@@ -46,7 +68,7 @@ class Daemon:
                 temp = self.get_temp()
                 self.fan_speed = round(controller.get_speed(temp), 2)
                 self.fan.value = self.fan_speed
-                time.sleep(config["daemon"]["update_interval"])
+                time.sleep(self.config["daemon"]["update_interval"])
             except KeyboardInterrupt:
                 self._exit()
                 break

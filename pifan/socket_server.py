@@ -19,6 +19,18 @@ class SocketServer:
     def _log_message(self, message):
         print(f"[socket_server] {message}")
 
+    def _ok_response(data: dict):
+        return {
+            "status": "ok",
+            "data": data
+        }
+    
+    def _error_response(message: str):
+        return {
+            "status": "error",
+            "message": message
+        }
+
     def _handle_connections(self):
         """
         Handle client connection on the socket
@@ -29,9 +41,17 @@ class SocketServer:
                 try:
                     data = connection.recv(1024).decode()
                     request = json.loads(data)
-                    if request["command"] == "get_speed":
-                        response = {"status": "ok","fan_speed": self.daemon.fan_speed}
-                    else: response = {"status": "error", "message": "unknown command"}
+
+                    match request["command"]:
+                        case "get_speed":
+                            response = self._ok_response({"fan_speed": self.daemon.fan_speed})
+                        case "get_status":
+                            response = self._ok_response({"status": self.daemon.get_status()})
+                        case "get_config":
+                            response = self._ok_response({"config": self.daemon.get_config()})
+                        case _:
+                            response = self._error_response("unknown command")
+
                     connection.sendall(json.dumps(response).encode("utf-8"))
                 except json.JSONDecodeError:
                     self._log_message("error decoding client message")
