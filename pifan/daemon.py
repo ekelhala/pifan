@@ -30,15 +30,16 @@ def run():
                                     "temp_low": config["fan"]["temp_low"]
                                     })
     while True:
-        temp = get_temp()
-        value = controller.get_speed(temp)
-        print(f"current temp:", temp)
-        print(f"current speed {value}")
-        fan.value = value
-        time.sleep(config["daemon"]["update_interval"])
+        try:
+            temp = get_temp()
+            value = controller.get_speed(temp)
+            print(f"current temp:", temp)
+            print(f"current speed {value}")
+            fan.value = value
+            time.sleep(config["daemon"]["update_interval"])
+        except KeyboardInterrupt:
+            fan.off()
+
 
 if __name__=="__main__":
-    try:
-        run()
-    except KeyboardInterrupt:
-        fan.value = 0.0
+    run()
