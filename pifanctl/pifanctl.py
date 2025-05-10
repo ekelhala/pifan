@@ -37,6 +37,7 @@ def main():
     if hasattr(args, "command"):
         if args.command in COMMANDS:
             send_command(args.command)
+        else: parser.print_help()
     else:
         parser.print_help()
 
