@@ -29,7 +29,7 @@ class SocketServer:
                     data = connection.recv(1024).decode()
                     request = json.loads(data)
                     if request["command"] == "get_speed":
-                        response = {"status": "ok","speed": self.daemon.value}
+                        response = {"status": "ok","fan_speed": self.daemon.fan_speed}
                     else: response = {"status": "error", "message": "unknown command"}
                     connection.sendall(json.dumps(response).encode("utf-8"))
                 except json.JSONDecodeError:
