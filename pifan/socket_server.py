@@ -16,6 +16,7 @@ class SocketServer:
         self.daemon = daemon
         self.stop_event = threading.Event()
 
+    def _handle_connections(self):
         """
         Handle client connection on the socket
         """
