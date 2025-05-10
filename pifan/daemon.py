@@ -38,7 +38,9 @@ def run():
             fan.value = value
             time.sleep(config["daemon"]["update_interval"])
         except KeyboardInterrupt:
-            fan.off()
+            print("stopping pifan daemon...")
+            fan.value = 0.0
+            break
 
 
 if __name__=="__main__":
