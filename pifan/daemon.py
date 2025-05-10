@@ -1,21 +1,12 @@
 import time
 from gpiozero import PWMOutputDevice
 
-from pifan.fan_control.max_speed_controller import MaxSpeedController
-from pifan.fan_control.linear_interpolator_controller import LinearInterpolatorController
-from fan_control.get_controller import get_controller
-from fan_control.base_controller import ControllerOptions
+from pifan.fan_control.get_controller import get_controller
+from pifan.fan_control.base_controller import ControllerOptions
 
 from pifan.config import config_loader
 
 TEMP_SENSOR_PATH = "/sys/class/thermal/thermal_zone0/temp"
-
-OPTIONS = {
-    "temp_low": 45.0,
-    "temp_high": 80.0,
-    "gpio_pin": "GPIO12",
-    "update_interval": 5
-}
 
 def get_temp() -> float:
     """

@@ -1,6 +1,6 @@
-from fan_control.base_controller import BaseController, ControllerOptions
-from fan_control.linear_interpolator_controller import LinearInterpolatorController
-from fan_control.max_speed_controller import MaxSpeedController
+from pifan.fan_control.base_controller import BaseController, ControllerOptions
+from pifan.fan_control.linear_interpolator_controller import LinearInterpolatorController
+from pifan.fan_control.max_speed_controller import MaxSpeedController
 
 def get_controller(controller_type: str,
                    controller_options: ControllerOptions) -> BaseController:
