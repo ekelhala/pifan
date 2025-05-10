@@ -14,6 +14,7 @@ class SocketServer:
     def __init__(self, daemon: Daemon, socket_path: str = "/tmp/pifan.sock"):
         self.socket_path = socket_path
         self.daemon = daemon
+        self.running = True
 
     def _log_message(self, message):
         print(f"[socket_server] {message}")
@@ -22,7 +23,7 @@ class SocketServer:
         """
         Handle client connection on the socket
         """
-        while True:
+        while self.running:
             connection, _ = self.server.accept()
             with connection:
                 try:
@@ -56,5 +57,6 @@ class SocketServer:
         Stop socket server
         """
         if self.thread:
+            self.running = False
             self.thread.join()
             self._log_message("socket server exiting now")
