@@ -12,7 +12,7 @@ setup(
     },
     include_package_data=True,
     data_files=[
-        ("/etc/pifan", ["pinfan-config.toml"]),
+        ("/etc/pifan", ["./config.toml"]),
         ("/etc/systemd/system/multi-user.target.wants", ["pifan.service"])
     ],
     author="Emil Kelhälä",
