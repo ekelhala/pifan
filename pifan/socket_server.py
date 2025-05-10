@@ -16,6 +16,9 @@ class SocketServer:
         self.daemon = daemon
         self.stop_event = threading.Event()
 
+    def _log_message(self, message):
+        print(f"[socket_server] {message}")
+
     def _handle_connections(self):
         """
         Handle client connection on the socket
