@@ -8,7 +8,7 @@ import threading
 
 class SocketServer:
 
-    def __init__(self, daemon, socket_path: str = "/var/run/pifan.sock"):
+    def __init__(self, daemon, socket_path: str = "/run/pifan.sock"):
         self.socket_path = socket_path
         self.daemon = daemon
 
