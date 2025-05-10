@@ -34,8 +34,7 @@ def get_speed_cmd():
 def get_status_cmd():
     response = send_command("get_status")
     if response:
-        print(f"""Fan speed>> {response['data']['fan_speed']*100}%\n
-              System temperature>> {response['data']['system_temperature']}C""")
+        print(f"Fan speed>> {response['data']['fan_speed']*100}%\nSystem temperature>> {response['data']['system_temperature']}C")
 
 def main():
     parser = argparse.ArgumentParser("pifanctl", description="Control and monitor the pifan daemon")
