@@ -28,7 +28,7 @@ def print_speed(response):
     print(response["fan_speed"])
 
 def print_error(response):
-    print(f"{response["status"]}: {response["message"]}")
+    print(response["status"], response["message"])
 
 def main():
     parser = argparse.ArgumentParser("pifanctl")
