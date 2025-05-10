@@ -24,7 +24,7 @@ def get_temp() -> float:
     return int(temp_str) / 1000
 
 def run():
-    config = config_loader.load_config("./default.toml")
+    config = config_loader.load_config()
     controller = MaxSpeedController({
                                     "temp_high": config["fan"]["temp_high"],
                                     "temp_low": config["fan"]["temp_low"]

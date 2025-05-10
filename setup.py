@@ -12,8 +12,8 @@ setup(
     },
     include_package_data=True,
     data_files=[
-        ("/etc/pifan", ["./default.toml"]),
-        ("/etc/systemd/system", ["./pifand.service"])
+        ("/etc/pifan", ["pinfan-config.toml"]),
+        ("/etc/systemd/system/multi-user.target.wants", ["pifan.service"])
     ],
     author="Emil Kelhälä",
     author_email="emil.kelhala@protonmail.com",
