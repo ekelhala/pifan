@@ -25,7 +25,7 @@ def send_command(command: str):
         sys.exit(1)
 
 def print_speed(response):
-    print(response["fan_speed"])
+    print(f"Fan speed: {response['fan_speed']*100}%")
 
 def print_error(response):
     print(response["status"], response["message"])
