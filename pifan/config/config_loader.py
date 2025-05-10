@@ -1,11 +1,11 @@
 import tomllib
 import logging
 
-def load_config(path: str = "/etc/pifan/config.toml") -> dict | None:
+def load_config(path: str = "/etc/pifan/default.toml") -> dict | None:
     """
     Loads the given config file as this program's configuration.
     Returns the configuration as dict if successful, or None if not
-    The path defaults to /etc/pifan/config.toml
+    The path defaults to /etc/pifan/default.toml
 
     The resulting dict will look like this:
     ```
