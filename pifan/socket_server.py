@@ -19,13 +19,13 @@ class SocketServer:
     def _log_message(self, message):
         print(f"[socket_server] {message}")
 
-    def _ok_response(data: dict):
+    def _ok_response(self, data: dict):
         return {
             "status": "ok",
             "data": data
         }
     
-    def _error_response(message: str):
+    def _error_response(self, message: str):
         return {
             "status": "error",
             "message": message
