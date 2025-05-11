@@ -7,9 +7,8 @@ class Client:
         """
         Initialize and connect the client
         """
-        self.socket_path = socket_path
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        self.socket.connect()
+        self.socket.connect(socket_path)
 
     def _print_error(self, message: str):
         print(f"[client] Error: {message}")
