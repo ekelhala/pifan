@@ -45,6 +45,9 @@ class Daemon:
             "frequency": self.config["fan"]["frequency"]
         }
 
+    def set_controller(self, controller_name: str):
+        self.controller = get_controller(controller_name, self.controller_options)
+
     def _handle_sigterm(self, _signum, _frame):
         self._keep_running = False
         self._exit()
@@ -55,9 +58,9 @@ class Daemon:
 
     def run(self):
         self.config = config_loader.load_config()
-        controller_options = ControllerOptions(self.config["fan"]["temp_high"],
+        self.controller_options = ControllerOptions(self.config["fan"]["temp_high"],
                                                self.config["fan"]["temp_low"])
-        controller = get_controller(self.config["fan"]["controller"], controller_options)
+        self.controller = get_controller(self.config["fan"]["controller"], self.controller_options)
         self.fan = PWMOutputDevice(pin=self.config["fan"]["gpio_pin"], 
                                    frequency=self.config["fan"]["frequency"])
         signal.signal(signal.SIGTERM, self._handle_sigterm)
@@ -66,7 +69,7 @@ class Daemon:
         while self._keep_running:
             try:
                 temp = self.get_temp()
-                self.fan_speed = round(controller.get_speed(temp), 2)
+                self.fan_speed = round(self.controller.get_speed(temp), 2)
                 self.fan.value = self.fan_speed
                 time.sleep(self.config["daemon"]["update_interval"])
             except KeyboardInterrupt:

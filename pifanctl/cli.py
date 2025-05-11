@@ -17,6 +17,10 @@ class CLI:
         get_status = subparsers.add_parser("status", help="Get daemon status")
         get_status.set_defaults(func=self._get_status_cmd)
 
+        set_controller = subparsers.add_parser("set_controller", help="Set controller profile, gets reset on daemon restart")
+        set_controller.add_argument("controller_name", type=str, help="The name of the controller to use")
+        set_controller.set_defaults(func=self._set_controller_cmd)
+
     def _empty_response_handler(self):
         print("empty response from daemon")
 
@@ -28,23 +32,30 @@ class CLI:
             sys.exit(1)
         return client
 
-    def _get_speed_cmd(self, client: Client):
-        response = client.send_command("get_speed")
+    def _get_speed_cmd(self, client: Client, _args):
+        response = client.send_command({"command": "get_speed"})
         if response:
             print(f"Fan speed: {response['data']['fan_speed']*100}%")
         else: self._empty_response_handler()
 
-    def _get_status_cmd(self, client: Client):
-        response = client.send_command("get_status")
+    def _get_status_cmd(self, client: Client, _args):
+        response = client.send_command({"command": "get_status"})
         if response:
             print(f"Fan speed>> {response['data']['fan_speed']*100}%\nSystem temperature>> {response['data']['system_temperature']}C")
+        else: self._empty_response_handler()
+
+    def _set_controller_cmd(self, client: Client, args):
+        response = client.send_command({"command": "set_controller",
+                                        "controller_name": args.controller_name})
+        if response:
+            print(response["data"]["message"])
         else: self._empty_response_handler()
 
     def run(self):
         args = self.parser.parse_args()
         if hasattr(args, "func"):
             client = self._get_client()
-            args.func(client)
+            args.func(client, args)
             client.destroy()
         else:
             self.parser.print_help()

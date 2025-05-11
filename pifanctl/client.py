@@ -13,9 +13,9 @@ class Client:
     def _print_error(self, message: str):
         print(f"[client] Error: {message}")
 
-    def send_command(self, command: str) -> dict|None:
+    def send_command(self, command: dict) -> dict|None:
         try:
-            self.socket.sendall(json.dumps({"command": command}).encode("utf-8"))
+            self.socket.sendall(json.dumps(command).encode("utf-8"))
             response = self.socket.recv(4096).decode("utf-8")
             response_dict = json.loads(response)
             if response_dict["status"] == "error":
