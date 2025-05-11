@@ -42,7 +42,7 @@ class Daemon:
             "temp_high": self.config["fan"]["temp_high"],
             "temp_low": self.config["fan"]["temp_low"],
             "gpio_pin": self.config["fan"]["gpio_pin"],
-            "controller": self.config["fan"]["controller"],
+            "controller": self.controller.get_name(),
             "frequency": self.config["fan"]["frequency"]
         }
 
