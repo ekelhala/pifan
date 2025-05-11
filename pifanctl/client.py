@@ -27,5 +27,5 @@ class Client:
             return None
     
     def destroy(self):
-        self.socket.shutdown()
+        self.socket.shutdown(socket.SHUT_RDWR)
         self.socket.close()
