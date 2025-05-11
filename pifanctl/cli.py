@@ -1,11 +1,11 @@
 import argparse
+import sys
 
 from pifanctl.client import Client
 
 class CLI:
 
-    def __init__(self, client: Client):
-        self.client = client
+    def __init__(self):
 
         self.parser = argparse.ArgumentParser("pifanctl", description="Control and monitor the pifan daemon")
         subparsers = self.parser.add_subparsers(dest="command")
@@ -19,6 +19,14 @@ class CLI:
 
     def _empty_response_handler(self):
         print("empty response from daemon")
+
+    def _get_client(self) -> Client:
+        try:
+            client = Client()
+        except Exception as e:
+            print(f"connection error: {e}")
+            sys.exit(1)
+        return client
 
     def _get_speed_cmd(self, client: Client):
         response = client.send_command("get_speed")
@@ -34,5 +42,9 @@ class CLI:
 
     def run(self):
         args = self.parser.parse_args()
-        args.func(self.client)
-        self.client.destroy()
+        if hasattr(args, "func"):
+            client = self._get_client()
+            args.func(client)
+            client.destroy()
+        else:
+            self.parser.print_help()
