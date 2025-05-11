@@ -45,8 +45,12 @@ class Daemon:
             "frequency": self.config["fan"]["frequency"]
         }
 
-    def set_controller(self, controller_name: str):
-        self.controller = get_controller(controller_name, self.controller_options)
+    def set_controller(self, controller_name: str) -> bool:
+        controller = get_controller(controller_name, self.controller_options)
+        if controller:
+            self.controller = controller
+            return True
+        return False
 
     def _handle_sigterm(self, _signum, _frame):
         self._keep_running = False
@@ -61,6 +65,9 @@ class Daemon:
         self.controller_options = ControllerOptions(self.config["fan"]["temp_high"],
                                                self.config["fan"]["temp_low"])
         self.controller = get_controller(self.config["fan"]["controller"], self.controller_options)
+        if not self.controller:
+            self._log_message(f"error: invalid controller {self.config['fan']['controller']}, defaulting to max_speed")
+            self.controller = get_controller("max_speed", self.controller_options)
         self.fan = PWMOutputDevice(pin=self.config["fan"]["gpio_pin"], 
                                    frequency=self.config["fan"]["frequency"])
         signal.signal(signal.SIGTERM, self._handle_sigterm)

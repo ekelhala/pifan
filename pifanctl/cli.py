@@ -49,7 +49,6 @@ class CLI:
                                         "controller_name": args.controller_name})
         if response:
             print(response["data"]["message"])
-        else: self._empty_response_handler()
 
     def run(self):
         args = self.parser.parse_args()

@@ -11,6 +11,8 @@ def get_controller(controller_type: str,
             controller = LinearInterpolatorController(controller_options)
         case "silent":
             controller = SilentController(controller_options)
-        case _:
+        case "max_speed":
             controller = MaxSpeedController(controller_options)
+        case _:
+            controller = None
     return controller

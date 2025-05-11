@@ -50,8 +50,10 @@ class SocketServer:
                         case "get_config":
                             response = self._ok_response(self.daemon.get_config())
                         case "set_controller":
-                            self.daemon.set_controller(request["controller_name"])
-                            response = self._ok_response({"message": "controller set"})
+                            if self.daemon.set_controller(request["controller_name"]):
+                                response = self._ok_response({"message": "controller set"})
+                            else:
+                                response = self._error_response(f"invalid controller {request['controller_name']}")
                         case _:
                             response = self._error_response("unknown command")
 
