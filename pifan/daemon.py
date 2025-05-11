@@ -30,7 +30,8 @@ class Daemon:
         """
         return {
             "system_temperature": self.get_temp(),
-            "fan_speed": self.fan_speed
+            "fan_speed": self.fan_speed,
+            "controller": self.controller.get_name()
         }
     
     def get_config(self) -> dict[str]:

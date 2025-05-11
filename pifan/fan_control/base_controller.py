@@ -23,3 +23,8 @@ class BaseController():
         """
         Calculate current fan speed based on given temperature and options
         """
+
+    def get_name(self) -> str:
+        """
+        Return controller name as string
+        """

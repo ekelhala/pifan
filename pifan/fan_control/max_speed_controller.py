@@ -7,3 +7,5 @@ class MaxSpeedController(BaseController):
     
     def get_speed(self, _system_temperature: float) -> float:
         return 1.0
+    
+    def get_name(self): return "max_speed"

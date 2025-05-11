@@ -11,3 +11,4 @@ class LinearInterpolatorController(BaseController):
         # return a value between 0.3 and 1.0 based on linear interpolation
             return 0.3 + (system_temperature - self.options.temp_low) * (1.0 - 0.3) / (self.options.temp_high - self.options.temp_low)
 
+    def get_name(self): return "linear_interpolator"

@@ -10,3 +10,5 @@ class SilentController(BaseController):
         if system_temperature > self.options.temp_high * 0.9:
             return 1.0
         return 0.0
+
+    def get_name(self): return "silent"

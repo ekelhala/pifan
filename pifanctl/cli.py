@@ -41,7 +41,9 @@ class CLI:
     def _get_status_cmd(self, client: Client, _args):
         response = client.send_command({"command": "get_status"})
         if response:
-            print(f"Fan speed>> {response['data']['fan_speed']*100}%\nSystem temperature>> {response['data']['system_temperature']}C")
+            print(f"Fan speed>> {response['data']['fan_speed']*100}%")
+            print(f"System temperature>> {response['data']['system_temperature']}C")
+            print(f"Controller profile>> {response['data']['controller']}")
         else: self._empty_response_handler()
 
     def _set_controller_cmd(self, client: Client, args):
