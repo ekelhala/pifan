@@ -11,7 +11,7 @@ from pifan.daemon import Daemon
 
 class SocketServer:
 
-    def __init__(self, daemon: Daemon, socket_path: str = "/tmp/pifan.sock"):
+    def __init__(self, daemon: Daemon, socket_path: str = "/run/pifan.sock"):
         self.socket_path = socket_path
         self.daemon = daemon
         self.stop_event = threading.Event()
