@@ -2,14 +2,13 @@ import socket
 from threading import Event
 import json
 
+from pifan.socket_server.logger import log_message
+
 class ConnectionHandler:
 
     def __init__(self, server_socket: socket.socket, stop_event: Event):
         self.server_socket = server_socket
         self.stop_event = stop_event
-
-    def _log_message(self, message):
-        print(f"[socket_server] {message}")
 
     def _ok_response(self, data: dict):
         return {
@@ -51,7 +50,7 @@ class ConnectionHandler:
 
                     connection.sendall(json.dumps(response).encode("utf-8"))
                 except json.JSONDecodeError:
-                    self._log_message("error decoding client message")
+                    log_message("error decoding client message")
                     connection.sendall(json.dumps({"status":"error", "message": "JSON decode error"}).encode("utf-8"))                    
                 except Exception:
                     connection.sendall(json.dumps({"status":"error", "message": "unknown error"}).encode("utf-8"))

@@ -8,6 +8,7 @@ import threading
 
 from pifan.daemon import Daemon
 from pifan.socket_server.connection_handler import ConnectionHandler
+from pifan.socket_server.logger import log_message
 
 class SocketServer:
 
@@ -15,9 +16,6 @@ class SocketServer:
         self.socket_path = socket_path
         self.daemon = daemon
         self.stop_event = threading.Event()
-
-    def _log_message(self, message):
-        print(f"[socket_server] {message}")
 
     def start(self):
         """
@@ -31,7 +29,7 @@ class SocketServer:
         connection_handler = ConnectionHandler(server, self.stop_event)
         self.thread = threading.Thread(target=connection_handler.handle_connection, daemon=True)
         self.thread.start()
-        self._log_message(f"server started, listening on socket {self.socket_path}")
+        log_message(f"server started, listening on socket {self.socket_path}")
 
     def stop(self):
         """
@@ -41,4 +39,4 @@ class SocketServer:
             self.stop_event.set()
             if os.path.exists(self.socket_path):
                 os.remove(self.socket_path)
-            self._log_message("socket server exiting now")
+            log_message("socket server exiting now")
