@@ -26,7 +26,7 @@ class SocketServer:
         server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         server.bind(self.socket_path)
         server.listen(1)
-        connection_handler = ConnectionHandler(server, self.stop_event)
+        connection_handler = ConnectionHandler(server, self.stop_event, self.daemon)
         self.thread = threading.Thread(target=connection_handler.handle_connection, daemon=True)
         self.thread.start()
         log_message(f"server started, listening on socket {self.socket_path}")

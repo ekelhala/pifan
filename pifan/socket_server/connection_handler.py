@@ -3,12 +3,15 @@ from threading import Event
 import json
 
 from pifan.socket_server.logger import log_message
+from pifan.socket_server.command_handler import CommandHandler
+from pifan.daemon import Daemon
 
 class ConnectionHandler:
 
-    def __init__(self, server_socket: socket.socket, stop_event: Event):
+    def __init__(self, server_socket: socket.socket, stop_event: Event, daemon: Daemon):
         self.server_socket = server_socket
         self.stop_event = stop_event
+        self.command_handler = CommandHandler(daemon)
 
     def _ok_response(self, data: dict):
         return {
@@ -32,22 +35,7 @@ class ConnectionHandler:
                 try:
                     data = connection.recv(1024).decode()
                     request = json.loads(data)
-
-                    match request["command"]:
-                        case "get_speed":
-                            response = self._ok_response({"fan_speed": self.daemon.fan_speed})
-                        case "get_status":
-                            response = self._ok_response(self.daemon.get_status())
-                        case "get_config":
-                            response = self._ok_response(self.daemon.get_config())
-                        case "set_controller":
-                            if self.daemon.set_controller(request["controller_name"]):
-                                response = self._ok_response({"message": "controller set"})
-                            else:
-                                response = self._error_response(f"invalid controller {request['controller_name']}")
-                        case _:
-                            response = self._error_response("unknown command")
-
+                    response = self.command_handler.handle_command(request)
                     connection.sendall(json.dumps(response).encode("utf-8"))
                 except json.JSONDecodeError:
                     log_message("error decoding client message")
