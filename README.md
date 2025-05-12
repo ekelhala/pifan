@@ -13,7 +13,18 @@ Currently the daemon can be installed by cloning the repository and using the pr
 
 ## `pifanctl`
 
-After installation, you can use the command-line client to communicate with the daemon. Use `sudo pifanctl` to run the client and see the available commands.
+After installation, you can use the command-line client to communicate with the daemon. Use `sudo pifanctl <command>` to run the client (check commands below).
+
+### Commands
+
+Currently `pifanctl` offers the following commands:
+
+- `status`
+  - See the status of the daemon, including fan speed and system temperature
+- `config`
+  - Inspect the configuration of the daemon
+- `set_controller <controller>`
+  - Set the fan controller profile. Possible values for `controller` are: `max_speed`, `linear_interpolator` and `silent`. Check [controllers](#controllers) for more information.
 
 ## Configuration
 
