@@ -11,13 +11,13 @@ class CommandHandler:
             case "get_speed":
                 return ok_response({"fan_speed": self.daemon.fan_speed})
             case "get_status":
-                return self._ok_response(self.daemon.get_status())
+                return ok_response(self.daemon.get_status())
             case "get_config":
-                return self._ok_response(self.daemon.get_config())
+                return ok_response(self.daemon.get_config())
             case "set_controller":
                 if self.daemon.set_controller(request["controller_name"]):
-                    return self._ok_response({"message": "controller set"})
+                    return ok_response({"message": "controller set"})
                 else:
-                    return self._error_response(f"invalid controller {request['controller_name']}")
+                    return error_response(f"invalid controller {request['controller_name']}")
             case _:
-                return self._error_response("unknown command")
+                return error_response("unknown command")

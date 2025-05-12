@@ -13,18 +13,6 @@ class ConnectionHandler:
         self.stop_event = stop_event
         self.command_handler = CommandHandler(daemon)
 
-    def _ok_response(self, data: dict):
-        return {
-            "status": "ok",
-            "data": data
-        }
-    
-    def _error_response(self, message: str):
-        return {
-            "status": "error",
-            "message": message
-        }
-
     def handle_connection(self):
         """
         Handle connections to server_socket
