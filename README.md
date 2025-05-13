@@ -32,7 +32,7 @@ Currently `pifanctl` offers the following commands:
 
 ## Controllers
 
-`pifan` provides three controller profiles for your fan: `max_speed`, `linear_interpolator` and `silent`. The controller you want to use can be selected by setting the value of `controller` under `[fan]` in the configuration file. Default controller is `max_speed`.
+`pifan` provides the following controller profiles for your fan: `max_speed`, `linear_interpolator`, `silent`, and `stepwise`. The controller you want to use can be selected by setting the value of `controller` under `[fan]` in the configuration file. Default controller is `max_speed`.
 
 ### `max_speed` and `linear_interpolator`
 
