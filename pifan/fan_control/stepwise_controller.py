@@ -6,8 +6,8 @@ class StepwiseController(BaseController):
     The steps used:
     lower than temp_low or <= 29% of temp_high -> 0% speed
     30-59% of temp_high -> 30% speed
-    60-99% of temp_high -> 60% speed
-    at or over temp_high -> 100% speed
+    60-90% of temp_high -> 60% speed
+    over 90% temp_high -> 100% speed
     """
 
     def get_speed(self, system_temperature):
@@ -16,7 +16,7 @@ class StepwiseController(BaseController):
             return 0.0
         elif temp_high_fraction <= 0.59:
             return 0.3
-        elif temp_high_fraction <= 0.99:
+        elif temp_high_fraction <= 0.90:
             return 0.6
         return 1.0
 
